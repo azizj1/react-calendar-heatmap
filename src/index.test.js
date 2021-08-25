@@ -111,16 +111,8 @@ describe('CalendarHeatmap props', () => {
     const wrapper = shallow(<CalendarHeatmap values={[]} endDate={today} startDate={today} />);
 
     expect(
-      today.getDate() ===
-        wrapper
-          .instance()
-          .getEndDate()
-          .getDate() &&
-        today.getMonth() ===
-          wrapper
-            .instance()
-            .getEndDate()
-            .getMonth(),
+      today.getDate() === wrapper.instance().getEndDate().getDate() &&
+        today.getMonth() === wrapper.instance().getEndDate().getMonth(),
     ).toBe(true);
   });
 
@@ -131,16 +123,8 @@ describe('CalendarHeatmap props', () => {
     );
 
     expect(
-      today.getDate() ===
-        wrapper
-          .instance()
-          .getEndDate()
-          .getDate() &&
-        today.getMonth() ===
-          wrapper
-            .instance()
-            .getEndDate()
-            .getMonth(),
+      today.getDate() === wrapper.instance().getEndDate().getDate() &&
+        today.getMonth() === wrapper.instance().getEndDate().getMonth(),
     ).toBe(true);
   });
 
@@ -150,7 +134,10 @@ describe('CalendarHeatmap props', () => {
     const expectedStartDate = shiftDate(today, -numDays + 1);
     const wrapper = shallow(
       <CalendarHeatmap
-        values={[{ date: expectedStartDate, count: 0 }, { date: today, count: 1 }]}
+        values={[
+          { date: expectedStartDate, count: 0 },
+          { date: today, count: 1 },
+        ]}
         endDate={today}
         startDate={dateNDaysAgo(numDays)}
         titleForValue={(value) => (value ? value.count : null)}
@@ -216,7 +203,7 @@ describe('CalendarHeatmap props', () => {
       />,
     );
 
-    expect(wrapper.find('[data-test="ok"]')).toHaveLength(1);
+    expect(wrapper.find('[data-test="ok"]')).toHaveLength(2);
   });
 
   describe('tooltipDataAttrs', () => {
@@ -226,7 +213,10 @@ describe('CalendarHeatmap props', () => {
       const expectedStartDate = shiftDate(today, -numDays + 1);
       const wrapper = shallow(
         <CalendarHeatmap
-          values={[{ date: today, count: 1 }, { date: expectedStartDate, count: 0 }]}
+          values={[
+            { date: today, count: 1 },
+            { date: expectedStartDate, count: 0 },
+          ]}
           endDate={today}
           startDate={expectedStartDate}
           tooltipDataAttrs={({ count }) => ({
@@ -243,7 +233,7 @@ describe('CalendarHeatmap props', () => {
     const count = 999;
     const startDate = '2018-06-01';
     const endDate = '2018-06-03';
-    const values = [{ date: '2018-06-02', count }];
+    const values = [{ date: '2018-06-01', count }];
     const props = {
       values,
       startDate,
