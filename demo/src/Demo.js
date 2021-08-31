@@ -29,6 +29,14 @@ function generateRandomValues(count, date = new Date()) {
   });
 }
 
+const DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+/**
+ * @param {Date} date
+ */
+function formatDate(date) {
+  return `${DAY_LABELS[date.getDay()]}, ${date.toLocaleDateString()}`;
+}
+
 class Demo extends React.Component {
   state = {
     values: generateRandomValues(200),
@@ -47,7 +55,7 @@ class Demo extends React.Component {
     }
     // Configuration for react-tooltip
     return {
-      'data-tip': `${value.date.toISOString().slice(0, 10)} has count: ${value.count}`,
+      'data-tip': `${formatDate(value.date)} has count: ${value.count}`,
     };
   };
 
@@ -70,6 +78,8 @@ class Demo extends React.Component {
               }}
               tooltipDataAttrs={this.getTooltipDataAttrs}
               onClick={this.handleClick}
+              showWeekdayLabels={true}
+              startOnMonday={true}
             />
           </div>
           <div className="col-12 col-sm-6">
