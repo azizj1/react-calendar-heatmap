@@ -1,3 +1,5 @@
+import { DAYS_IN_WEEK } from './constants';
+
 // returns a new date shifted a certain number of days (can be negative)
 export function shiftDate(date, numDays) {
   const newDate = new Date(date);
@@ -28,4 +30,31 @@ export function getRange(count) {
     arr.push(idx);
   }
   return arr;
+}
+
+/**
+ * @param {number} a is the dividend
+ * @param {number} m is the divisor, also known as the modulus.
+ * @return {number} a mod m. The Javascript mod operator (%) doesn't handle
+ * negative numbers, but this function does.
+ */
+function mod(a, m) {
+  const ans = a % m;
+  if (ans < 0) {
+    return ans + m;
+  }
+  return ans;
+}
+
+/**
+ * @param {Date} date
+ * @param {{startOnMonday?: boolean}} options
+ */
+export function getDay(date, options = {}) {
+  const { startOnMonday } = options;
+  const day = date.getDay();
+  if (startOnMonday) {
+    return mod(day - 1, DAYS_IN_WEEK);
+  }
+  return day;
 }

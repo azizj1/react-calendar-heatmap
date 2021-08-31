@@ -9,6 +9,7 @@ import {
   convertToDate,
   convertToUtc,
   getRange,
+  getDay,
 } from './helpers';
 
 const SQUARE_SIZE = 10;
@@ -68,11 +69,12 @@ class CalendarHeatmap extends React.Component {
   }
 
   getNumEmptyDaysAtStart() {
-    return this.getStartDate().getDay();
+    return getDay(this.getStartDate(), { startOnMonday: this.props.startOnMonday });
   }
 
   getNumEmptyDaysAtEnd() {
-    return DAYS_IN_WEEK - 1 - this.getEndDate().getDay();
+    const day = getDay(this.getEndDate(), { startOnMonday: this.props.startOnMonday });
+    return DAYS_IN_WEEK - 1 - day;
   }
 
   getWeekCount() {
@@ -302,7 +304,12 @@ class CalendarHeatmap extends React.Component {
     if (!this.props.showWeekdayLabels) {
       return null;
     }
-    return this.props.weekdayLabels.map((weekdayLabel, dayIndex) => {
+    const labels = [...this.props.weekdayLabels];
+    if (this.props.startOnMonday) {
+      labels.push(labels.shift());
+    }
+
+    return labels.map((weekdayLabel, dayIndex) => {
       const [x, y] = this.getWeekdayLabelCoordinates(dayIndex);
       const cssClasses = `${
         this.props.horizontal ? '' : `${CSS_PSEDUO_NAMESPACE}small-text`
@@ -359,6 +366,7 @@ CalendarHeatmap.propTypes = {
   showMonthLabels: PropTypes.bool, // whether to show month labels
   showWeekdayLabels: PropTypes.bool, // whether to show weekday labels
   showOutOfRangeDays: PropTypes.bool, // whether to render squares for extra days in week after endDate, and before start date
+  startOnMonday: PropTypes.bool, // whether to start the week on Monday (instead of Sunday)
   tooltipDataAttrs: PropTypes.oneOfType([PropTypes.object, PropTypes.func]), // data attributes to add to square for setting 3rd party tooltips, e.g. { 'data-toggle': 'tooltip' } for bootstrap tooltips
   titleForValue: PropTypes.func, // function which returns title text for value
   classForValue: PropTypes.func, // function which returns html class for value
@@ -379,6 +387,7 @@ CalendarHeatmap.defaultProps = {
   showMonthLabels: true,
   showWeekdayLabels: false,
   showOutOfRangeDays: false,
+  startOnMonday: false,
   tooltipDataAttrs: null,
   titleForValue: null,
   classForValue: (value) => (value ? 'color-filled' : 'color-empty'),
